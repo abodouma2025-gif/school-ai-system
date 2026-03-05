@@ -137,37 +137,40 @@ def check_password(hashed_password, user_password):
 def generate_deepseek_response(prompt, system_message="أنت مساعد تربوي متخصص"):
     """توليد رد ذكي مع معالجة الأخطاء"""
     # لو مفيش مفتاح، البرنامج هيديك رد تلقائي بدل ما يضرب خطأ
-    if DEEPSEEK_API_KEY == "YOUR_API_KEY_HERE" or not DEEPSEEK_API_KEY:
-        return "💡 (وضع التجربة): أهلاً يا أدهم! عشان الـ AI يشتغل بجد، لازم تحط الـ API Key. حالياً أنا بقترح عليك كمدرب تربوي إنك تركز على تحفيز الطلاب بالنقاط والجوائز."
-
-    headers = {
-        "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
-        "Content-Type": "application/json"
-    }
-    
-    data = {
-        "model": "deepseek-chat",
-        "messages": [
-            {"role": "system", "content": system_message},
-            {"role": "user", "content": prompt}
-        ],
-        "temperature": 0.7
-    }
-    
-    try:
-        response = requests.post(DEEPSEEK_API_URL, headers=headers, json=data, timeout=10)
-        if response.status_code == 200:
-            return response.json()["choices"][0]["message"]["content"]
-        else:
-            return "⚠️ عذراً، السيرفر مشغول حالياً، حاول مرة أخرى بعد قليل."
-    except:
-        return "❌ تأكد من الاتصال بالإنترنت أو صلاحية مفتاح الـ API."
-    }
-    
-    /* تنسيق المدخلات */
-.stTextInput > div > div > input, .stTextArea > div > div > textarea {
-        background-color: white !important;
-        color: black !important;
+   if submitted:
+                    if username and password:
+                        # التحقق من نوع المستخدم
+                        if username.startswith('T'):
+                            # بيانات المدرسين
+                            teachers = {
+                                "T001": hash_password("teacher123"),
+                                "T002": hash_password("teacher456")
+                            }
+                            if username in teachers and check_password(teachers[username], password):
+                                st.session_state.logged_in = True
+                                st.session_state.username = username
+                                st.session_state.user_type = "teacher"
+                                st.success("✅ تم تسجيل الدخول بنجاح!")
+                                st.rerun()
+                            else:
+                                st.error("❌ اسم المستخدم أو كلمة المرور غير صحيحة")
+                        
+                        elif username.startswith('S'):
+                            # بيانات الطلاب
+                            students = {
+                                "S001": hash_password("student123"),
+                                "S002": hash_password("student456")
+                            }
+                            if username in students and check_password(students[username], password):
+                                st.session_state.logged_in = True
+                                st.session_state.username = username
+                                st.session_state.user_type = "student"
+                                st.success("✅ تم تسجيل الدخول بنجاح!")
+                                st.rerun()
+                            else:
+                                st.error("❌ اسم المستخدم أو كلمة المرور غير صحيحة")
+                        else:
+                            st.error("❌ اسم المستخدم يجب أن يبدأ بـ T للمدرس أو S للطالب")
         border: 1px solid #CCC !important
     }
     
