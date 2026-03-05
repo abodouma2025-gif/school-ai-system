@@ -26,11 +26,36 @@ DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
 def load_css():
     st.markdown("""
     <style>
-    /* الوضع الليلي الأساسي */
+    /* الخلفية البيضاء */
     .stApp {
-        background-color: #1a1a1a;
-        color: #ffffff;
+        background-color: #F0F2F6;
+        color: #1E1E1E;
     }
+    
+    /* تنسيق الأزرار */
+    .stButton > button {
+        background: linear-gradient(45deg, #007bff, #00d2ff);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 10px 24px;
+        font-weight: bold;
+    }
+    
+    /* تنسيق الحقول (Inputs) */
+    .stTextInput > div > div > input {
+        background-color: white !important;
+        color: black !important;
+        border: 1px solid #CCC !important;
+    }
+
+    /* التبويبات */
+    .stTabs [data-baseweb="tab-list"] {
+        background-color: #E0E0E0;
+        border-radius: 10px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
     
     /* تنسيق الأزرار */
 .stButton > button {
