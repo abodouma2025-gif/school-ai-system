@@ -33,34 +33,34 @@ def load_css():
     }
     
     /* تنسيق الأزرار */
-    .stButton > button {
-        background: linear-gradient(45deg, #667eea, #764ba2);
+.stButton > button {
+        background: linear-gradient(45deg, #007bff, #00d2ff);
         color: white;
         border: none;
-        border-radius: 10px;
-        padding: 10px 20px;
+        border-radius: 12px;
+        padding: 10px 24px;
         font-weight: bold;
         transition: all 0.3s ease;
     }
-    
     .stButton > button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
     }
     
     /* تنسيق البطاقات */
-    .custom-card {
-        background: linear-gradient(145deg, #2d2d2d, #1f1f1f);
+.custom-card {
+        background: white;
         border-radius: 15px;
         padding: 20px;
         margin: 10px 0;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        border: 1px solid #3d3d3d;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border: 1px solid #E0E0E0;
+        color: #333;
     }
     
     /* تنسيق العناوين */
-    h1, h2, h3 {
-        color: #667eea !important;
+h1, h2, h3 {
+        color: #0056b3 !important;
         font-weight: bold !important;
     }
     
@@ -73,13 +73,13 @@ def load_css():
     }
     
     /* تنسيق شريط الأخبار */
-    .news-ticker {
-        background: linear-gradient(90deg, #667eea, #764ba2);
+.news-ticker {
+        background: #007bff;
         color: white;
-        padding: 10px;
-        border-radius: 10px;
+        padding: 12px;
+        border-radius: 12px;
         text-align: center;
-        animation: pulse 2s infinite;
+        font-weight: bold;
     }
     
     @keyframes pulse {
@@ -89,20 +89,23 @@ def load_css():
     }
     
     /* تنسيق لوحة الأخبار */
-    .news-board {
-        background: #2d2d2d;
+.news-board {
+        background: white;
         border-radius: 10px;
         padding: 15px;
-        border-right: 4px solid #667eea;
+        border-right: 5px solid #007bff;
+        color: #444;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
     
     /* تنسيق ركن الأذكار */
-    .dhikr-card {
-        background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
-        border-radius: 10px;
-        padding: 20px;
-        border: 1px solid #667eea;
+.dhikr-card {
+        background: #E3F2FD;
+        border-radius: 15px;
+        padding: 25px;
+        border: 2px solid #90CAF9;
         text-align: center;
+        color: #0D47A1;
     }
     
     /* تنسيق صندوق الضرورة */
@@ -113,34 +116,59 @@ def load_css():
         border: 1px solid #ff6b6b;
     }
     
-    /* تنسيق التبويبات */
+/* التبويبات (Tabs) */
     .stTabs [data-baseweb="tab-list"] {
-        background-color: #2d2d2d;
+        background-color: #E0E0E0;
         border-radius: 10px;
-        padding: 5px;
     }
-    
-    .stTabs [data-baseweb="tab"] {
-        color: white;
-    }
-    
     .stTabs [aria-selected="true"] {
-        background-color: #667eea !important;
-        color: white !important;
-        border-radius: 8px !important;
+        background-color: #007bff !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# ==================== دوال مساعدة ====================
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
+
+def check_password(hashed_password, user_password):
+    return hashed_password == hash_password(user_password)
+
+def generate_deepseek_response(prompt, system_message="أنت مساعد تربوي متخصص"):
+    """توليد رد ذكي مع معالجة الأخطاء"""
+    # لو مفيش مفتاح، البرنامج هيديك رد تلقائي بدل ما يضرب خطأ
+    if DEEPSEEK_API_KEY == "YOUR_API_KEY_HERE" or not DEEPSEEK_API_KEY:
+        return "💡 (وضع التجربة): أهلاً يا أدهم! عشان الـ AI يشتغل بجد، لازم تحط الـ API Key. حالياً أنا بقترح عليك كمدرب تربوي إنك تركز على تحفيز الطلاب بالنقاط والجوائز."
+
+    headers = {
+        "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    
+    data = {
+        "model": "deepseek-chat",
+        "messages": [
+            {"role": "system", "content": system_message},
+            {"role": "user", "content": prompt}
+        ],
+        "temperature": 0.7
+    }
+    
+    try:
+        response = requests.post(DEEPSEEK_API_URL, headers=headers, json=data, timeout=10)
+        if response.status_code == 200:
+            return response.json()["choices"][0]["message"]["content"]
+        else:
+            return "⚠️ عذراً، السيرفر مشغول حالياً، حاول مرة أخرى بعد قليل."
+    except:
+        return "❌ تأكد من الاتصال بالإنترنت أو صلاحية مفتاح الـ API."
     }
     
     /* تنسيق المدخلات */
-    .stTextInput > div > div > input {
-        background-color: #2d2d2d;
-        color: white;
-        border: 1px solid #3d3d3d;
-    }
-    
-    .stTextArea > div > div > textarea {
-        background-color: #2d2d2d;
-        color: white;
-        border: 1px solid #3d3d3d;
+.stTextInput > div > div > input, .stTextArea > div > div > textarea {
+        background-color: white !important;
+        color: black !important;
+        border: 1px solid #CCC !important
     }
     
     /* تنسيق المعلومات الجانبية */
