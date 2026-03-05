@@ -164,10 +164,7 @@ def check_password(hashed_password, user_password):
                         else:
                             st.error("❌ بيانات الطالب غير صحيحة")
                     else:
-                        st.error("❌ ابدأ بـ T أو S")
-                                st.error("❌ اسم المستخدم أو كلمة المرور غير صحيحة")
-                        else:
-                            st.error("❌ اسم المستخدم يجب أن يبدأ بـ T للمدرس أو S للطالب")
+                        st.error("❌ ابدأ بـ T للمدرس أو S للطالب")
         border: 1px solid #CCC !important
     }
     
