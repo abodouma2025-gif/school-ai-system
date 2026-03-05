@@ -883,3 +883,14 @@ def show_dhikr_section():
                 prompt = "اكتب ذكراً أو دعاءً مميزاً من الأذكار النبوية مع ذكر فضله"
                 response = generate_ai_response(prompt, "أنت متخصص في الأذكار والأدعية")
                 st.session_state.generated_dhikr = response
+if __name__ == "__main__":
+    if 'logged_in' not in st.session_state:
+        st.session_state.logged_in = False
+
+    if not st.session_state.logged_in:
+        show_login_page()
+    else:
+        if st.session_state.user_type == 'teacher':
+            teacher_dashboard()
+        else:
+            student_dashboard()
