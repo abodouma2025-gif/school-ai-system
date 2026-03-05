@@ -132,42 +132,39 @@ def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
 def check_password(hashed_password, user_password):
-    return hashed_password == hash_password(user_password)
-
-def generate_deepseek_response(prompt, system_message="أنت مساعد تربوي متخصص"):
-    """توليد رد ذكي مع معالجة الأخطاء"""
-    # لو مفيش مفتاح، البرنامج هيديك رد تلقائي بدل ما يضرب خطأ
-   if submitted:
-                    if username and password:
-                        # التحقق من نوع المستخدم
-                        if username.startswith('T'):
-                            # بيانات المدرسين
-                            teachers = {
-                                "T001": hash_password("teacher123"),
-                                "T002": hash_password("teacher456")
-                            }
-                            if username in teachers and check_password(teachers[username], password):
-                                st.session_state.logged_in = True
-                                st.session_state.username = username
-                                st.session_state.user_type = "teacher"
-                                st.success("✅ تم تسجيل الدخول بنجاح!")
-                                st.rerun()
-                            else:
-                                st.error("❌ اسم المستخدم أو كلمة المرور غير صحيحة")
-                        
-                        elif username.startswith('S'):
-                            # بيانات الطلاب
-                            students = {
-                                "S001": hash_password("student123"),
-                                "S002": hash_password("student456")
-                            }
-                            if username in students and check_password(students[username], password):
-                                st.session_state.logged_in = True
-                                st.session_state.username = username
-                                st.session_state.user_type = "student"
-                                st.success("✅ تم تسجيل الدخول بنجاح!")
-                                st.rerun()
-                            else:
+   # نموذج تسجيل الدخول
+        with st.form("login_form"):
+            username = st.text_input("اسم المستخدم (S للطالب / T للمدرس)")
+            password = st.text_input("كلمة المرور", type="password")
+            submitted = st.form_submit_button("دخول")
+            
+            if submitted:
+                if username and password:
+                    # التحقق من نوع المستخدم (مدرس)
+                    if username.startswith('T'):
+                        teachers = {"T001": hash_password("teacher123"), "T002": hash_password("teacher456")}
+                        if username in teachers and check_password(teachers[username], password):
+                            st.session_state.logged_in = True
+                            st.session_state.username = username
+                            st.session_state.user_type = "teacher"
+                            st.success("✅ أهلاً بك يا أستاذ!")
+                            st.rerun()
+                        else:
+                            st.error("❌ بيانات المدرس غير صحيحة")
+                    
+                    # التحقق من نوع المستخدم (طالب)
+                    elif username.startswith('S'):
+                        students = {"S001": hash_password("student123"), "S002": hash_password("student456")}
+                        if username in students and check_password(students[username], password):
+                            st.session_state.logged_in = True
+                            st.session_state.username = username
+                            st.session_state.user_type = "student"
+                            st.success("✅ بالتوفيق يا بطل!")
+                            st.rerun()
+                        else:
+                            st.error("❌ بيانات الطالب غير صحيحة")
+                    else:
+                        st.error("❌ ابدأ بـ T أو S")
                                 st.error("❌ اسم المستخدم أو كلمة المرور غير صحيحة")
                         else:
                             st.error("❌ اسم المستخدم يجب أن يبدأ بـ T للمدرس أو S للطالب")
